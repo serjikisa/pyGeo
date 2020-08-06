@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+
+  geo-rest-container:
+    build: .
+    working_dir: /app
+    volumes:
+      - ./:/app
+    env_file:
+      - .secrets.env
+    depends_on: 
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB_NO=0
+    ports:
+      - '5000:5000'
+    command: gunicorn main:app --bind '0.0.0.0:5000' --timeout 10800 --access-logfile '-'

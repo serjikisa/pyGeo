@@ -1,0 +1,5 @@
+flask
+redis
+requests
+Flask-Testing
+gunicorn
